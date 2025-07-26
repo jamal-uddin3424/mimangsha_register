@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <title>মীমাংসা রেজিস্টার ডেটা এন্ট্রি</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+    }
+    .container {
+        max-width: 800px;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        background-color: #f9f9f9;
+    }
+
+    .form-group-box {
+        background-color: #ffffff;
+        border: 1px solid #eee;
+        border-radius: 5px;
+        padding: 15px;
+        margin-bottom: 20px;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    }
+
+    .form-group-box .form-group {
+        margin-bottom: 10px;
+    }
+    .form-group-box .form-group:last-child {
+        margin-bottom: 0;
+    }
+
+    .paragraph-entry {
+        background-color: #ffffff;
+        border: 1px solid #cce5ff;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 25px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .paragraph-entry .form-group {
+        margin-bottom: 15px;
+        padding: 0;
+        border: none;
+        background-color: transparent;
+        box-shadow: none;
+    }
+    .paragraph-entry .form-group:last-child {
+        margin-bottom: 0;
+    }
+
+    .paragraph-entry .form-group label {
+        margin-top: 10px;
+        display: block;
+    }
+    .paragraph-entry .form-group:first-of-type label {
+        margin-top: 20px;
+    }
+
+    #responseMessage {
+        margin-top: 20px;
+        font-weight: bold;
+        color: #28a745;
+    }
+
+    .paragraph-entry h4 {
+      color: #0056b3;
+      font-weight: bold;
+      font-size: 1.1rem;
+      margin-top: 0;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #007bff;
+    }
+
+    .main-action-buttons-container {
+      margin-top: 20px;
+      margin-bottom: 15px;
+      display: flex;
+      gap: 15px;
+      align-items: flex-start;
+    }
+
+    .main-action-buttons-container .btn {
+      flex-grow: 1;
+    }
+
+    /* Custom Dropdown Styles */
+    .custom-dropdown-wrapper {
+      position: relative;
+      flex-grow: 1;
+    }
+
+    .custom-dropdown-toggle {
+        width: 100%;
+    }
+
+    /* Main Custom Dropdown Menu (Parent Menu) */
+    .custom-dropdown-menu {
+        position: absolute;
+        bottom: 100%;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+        background-color: #fff;
+        border: 1px solid rgba(0,0,0,.15);
+        border-radius: 0.25rem;
+        box-shadow: 0 0.5rem 1rem rgba(0,0,0,.175);
+        padding: 7px 6px 6px 7px;
+        margin-bottom: 5px;
+
+        /* Transition properties */
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(20px); /* Start 20px below */
+        transition: opacity 0.2s ease-out, visibility 0.2s ease-out, transform 0.2s ease-out;
+        pointer-events: none; /* Initially non-interactive */
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .custom-dropdown-menu.show {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0); /* Move to original position */
+        pointer-events: auto; /* Make interactive when shown */
+    }
+
+    /* Dropdown Item Container for Nested Menus */
+    .dropdown-item-container {
+        position: relative;
+        width: 100%;
+    }
+
+    /* Parent Dropdown Items (e.g., পাক্ষিক রিটার্ণ) */
+    .parent-dropdown-item {
+        width: 100%;
+        text-align: left;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 15px;
+        font-size: 1rem;
+        font-weight: bold;
+        transition: background-color 0.2s ease, color 0.2s ease;
+        border-radius: 4px;
+        background-color: #e0f7fa;
+        color: #00796b;
+    }
+
+    /* Colors for parent items */
+    .dropdown-item.pakhik { background-color: #e0f7fa; color: #00796b; }
+    .dropdown-item.mashik { background-color: #e8f5e9; color: #2e7d32; }
+    .dropdown-item.troimasik { background-color: #fff3e0; color: #ef6c00; }
+    .dropdown-item.shanmasik { background-color: #fce4ec; color: #ad1457; }
+    .dropdown-item.batsarik { background-color: #e3f2fd; color: #1976d2; }
+
+    /* Hover styles for parent items */
+    .parent-dropdown-item:hover {
+        filter: brightness(95%);
+        cursor: pointer;
+    }
+    .dropdown-item.pakhik:hover, .dropdown-item.pakhik:focus { background-color: #b2ebf2; color: #004d40; }
+    .dropdown-item.mashik:hover, .dropdown-item.mashik:focus { background-color: #a5d6a7; color: #1b5e20; }
+    .dropdown-item.troimasik:hover, .dropdown-item.troimasik:focus { background-color: #ffe0b2; color: #e65100; }
+    .dropdown-item.shanmasik:hover, .dropdown-item.shanmasik:focus { background-color: #f8bbd0; color: #880e4f; }
+    .dropdown-item.batsarik:hover, .dropdown-item.batsarik:focus { background-color: #90caf9; color: #0d47a1; }
+
+    /* Arrow icon for parent dropdown items */
+    .dropdown-arrow {
+        font-size: 0.8em;
+        margin-left: 10px;
+        order: 1; /* Keep it on the right */
+        transform: rotate(0deg); /* Default right arrow */
+        transition: transform 0.3s ease;
+    }
+
+    /* Rotate arrow when nested menu is shown */
+    .dropdown-item-container.show-nested .dropdown-arrow {
+        transform: rotate(90deg); /* Points down/right when hovered */
+    }
+
+    /* Rotate arrow for last two items when their nested menu is shown */
+    .dropdown-item-container:nth-last-child(1).show-nested .dropdown-arrow,
+    .dropdown-item-container:nth-last-child(2).show-nested .dropdown-arrow {
+        transform: rotate(-90deg); /* Points up/left when hovered */
+    }
+
+    /* Nested Dropdown Menu (Ministry Menu) */
+    .nested-dropdown-menu {
+        position: absolute;
+        left: 100%; /* প্যারেন্ট আইটেমের ঠিক ডান প্রান্তে */
+        margin-left: 6px; /* ছোট একটি ফাঁকা স্থান */
+        
+        top: 161%; /* Default: Align top of nested menu to middle of parent */
+        transform: translateY(-50%) translateX(20px); /* Adjust for vertical centering and initial slide position */
+        
+        min-width: 200px;
+        z-index: 1001;
+        background-color: #fff;
+        border: 1px solid rgba(0,0,0,.15);
+        border-radius: 0.25rem;
+        box-shadow: 0 0.5rem 1rem rgba(0,0,0,.175);
+        padding: 8px;
+        flex-direction: column;
+        gap: 5px;
+
+        /* Transition properties */
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease-out, visibility 0.3s ease-out, transform 0.3s ease-out;
+        pointer-events: none; /* Initially non-interactive */
+        display: flex;
+        white-space: nowrap;
+    }
+
+    /* Override for the last two dropdown-item-containers (ষাণ্মাসিক and বাৎসরিক) */
+    .dropdown-item-container:nth-last-child(1) .nested-dropdown-menu, /* For বাৎসরিক রিটার্ণ */
+    .dropdown-item-container:nth-last-child(2) .nested-dropdown-menu { /* For ষাণ্মাসিক রিটার্ণ */
+        top: auto; /* Remove top alignment */
+        bottom: 0; /* Align with the bottom of the parent container */
+        transform: translateY(0) translateX(20px); /* Reset translateY to 0 as bottom:0 is used */
+    }
+
+    /* When the parent container has 'show-nested' class, show the nested menu */
+    .dropdown-item-container.show-nested .nested-dropdown-menu {
+        opacity: 1;
+        visibility: visible;
+        /* Keep transform for slide-in, but adjust based on specific rules */
+        transform: translateY(-50%) translateX(0); /* Default for most items */
+        pointer-events: auto; /* Make interactive when shown */
+    }
+
+    /* Specific show state for the last two containers */
+    .dropdown-item-container:nth-last-child(1).show-nested .nested-dropdown-menu,
+    .dropdown-item-container:nth-last-child(2).show-nested .nested-dropdown-menu {
+        transform: translateY(0) translateX(0); /* No vertical transform when aligned to bottom */
+    }
+
+    /* Ensure nested dropdowns are hidden if the main dropdown is not visible */
+    .custom-dropdown-menu:not(.show) .nested-dropdown-menu {
+        opacity: 0 !important;
+        visibility: hidden !important;
+        /* Revert to initial hidden state transform, ensuring vertical centering remains for top items */
+        transform: translateY(-50%) translateX(20px) !important;
+        pointer-events: none !important;
+    }
+
+    /* Specific hide state for the last two containers when main dropdown is closed */
+    .custom-dropdown-menu:not(.show) .dropdown-item-container:nth-last-child(1) .nested-dropdown-menu,
+    .custom-dropdown-menu:not(.show) .dropdown-item-container:nth-last-child(2) .nested-dropdown-menu {
+        transform: translateY(0) translateX(20px) !important; /* No vertical transform when hidden and bottom-aligned */
+    }
+
+    /* Individual Nested Dropdown Items (Ministry Buttons) */
+    .nested-dropdown-menu .dropdown-item {
+        width: 100%;
+        text-align: left;
+        font-size: 0.95rem;
+        padding: 12px 15px;
+        border-radius: 4px;
+    }
+
+    /* Colorful styles for nested ministry buttons */
+    .nested-dropdown-menu .dropdown-item[data-ministry="আর্থিক প্রতিষ্ঠান বিভাগ"] {
+        background-color: #ffe0b2;
+        color: #e65100;
+    }
+    .nested-dropdown-menu .dropdown-item[data-ministry="আর্থিক প্রতিষ্ঠান বিভাগ"]:hover {
+        background-color: #ffcc80;
+        color: #bf360c;
+    }
+
+    .nested-dropdown-menu .dropdown-item[data-ministry="বস্ত্র ও পাট"] {
+        background-color: #c8e6c9;
+        color: #388e3c;
+    }
+    .nested-dropdown-menu .dropdown-item[data-ministry="বস্ত্র ও পাট"]:hover {
+        background-color: #a5d6a7;
+        color: #1b5e20;
+    }
+
+    .nested-dropdown-menu .dropdown-item[data-ministry="শিল্প+বাণিজ্য+বিমান"] {
+        background-color: #bbdefb;
+        color: #1976d2;
+    }
+    .nested-dropdown-menu .dropdown-item[data-ministry="শিল্প+বাণিজ্য+বিমান"]:hover {
+        background-color: #90caf9;
+        color: #0d47a1;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2 class="text-center">মীমাংসা রেজিস্টার ডেটা এন্ট্রি ফরম</h2>
+    <div id="currentCycleMessage" class="mt-2 text-center mb-5" style="color: green; font-weight: bold;">সময়কাল লোড হচ্ছে...</div>
+    <form id="dataEntryForm">
+
+      <div class="form-group">
+          <div class="form-group">
+            <label for="ministryName">মন্ত্রণালয়ের নাম:</label>
+            <input type="text" class="form-control" id="ministryName" name="ministryName" required>
+          </div>
+          <div class="form-group">
+            <label for="institutionName">প্রতিষ্ঠানের নাম:</label>
+            <input type="text" class="form-control" id="institutionName" name="institutionName" required>
+          </div>
+
+          <div class="form-group">
+            <label for="branchName"> শাখার নাম:</label>
+            <input type="text" class="form-control" id="branchName" name="branchName" required>
+          </div>
+
+          <div class="form-group">
+            <label for="auditYear">নিরীক্ষা বছর:</label>
+            <input type="text" class="form-control" id="auditYear" name="auditYear" required>
+          </div>
+
+          <div class="form-group">
+            <label for="letterNoDate">পত্র নং ও তাং:</label>
+            <input type="text" class="form-control" id="letterNoDate" name="letterNoDate">
+          </div>
+
+          <div class="form-group">
+            <label for="workPaperNoDate">কার্যপত্র নং ও তাং:</label>
+            <input type="text" class="form-control" id="workPaperNoDate" name="workPaperNoDate">
+          </div>
+          <div class="form-group">
+              <label for="objectionType">অনুচ্ছেদের ধরণ:</label>
+              <select id="objectionType" name="objectionType" required class="form-control">
+                  <option value="" disabled selected>নির্বাচন করুন</option>
+                  <option value="এসএফআই (জবাব)">এসএফআই (জবাব)</option>
+                  <option value="এসএফআই (ত্রিপক্ষীয় সভা)">এসএফআই (ত্রিপক্ষীয় সভা)</option>
+                  <option value="নন এসএফআই (জবাব)">নন এসএফআই (জবাব)</option>
+                  <option value="নন এসএফআই (দ্বিপক্ষীয় সভা)">নন এসএফআই (দ্বিপক্ষীয় সভা)</option>
+              </select>
+          </div>
+      </div>
+      <div id="paragraphsContainer">
+        <div class="paragraph-entry row no-gutters" id="paragraph1">
+          <h4 class="col-12">ক্রমিক নং- 1</h4>
+
+          <div class="col-12">
+            <div class="form-group">
+              <label for="paragraphNo1">অনুচ্ছেদ নং:</label>
+              <input type="text" class="form-control" id="paragraphNo1" name="paragraphNo[]" required list="numbersList">
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div class="form-group">
+              <label for="paragraphType1">নিষ্পত্তির ধরণ:</label>
+              <select class="form-control" id="paragraphType1" name="paragraphType[]">
+                <option value="" disabled selected>নির্বাচন করুন</option>
+                <option value="পূর্ণাঙ্গ">পূর্ণাঙ্গ</option>
+                <option value="আংশিক">আংশিক</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div class="form-group">
+              <label for="involvedAmount1">জড়িত টাকা:</label>
+              <input type="text" class="form-control" id="involvedAmount1" name="involvedAmount[]">
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div class="form-group">
+              <label for="vatCollected1">ভ্যাট আদায়:</label>
+              <input type="text" class="form-control" id="vatCollected1" name="vatCollected[]">
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div class="form-group">
+              <label for="vatAdjusted1">ভ্যাট সমন্বয়:</label>
+              <input type="text" class="form-control" id="vatAdjusted1" name="vatAdjusted[]">
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div class="form-group">
+              <label for="incomeTaxCollected1">আয়কর আদায়:</label>
+              <input type="text" class="form-control" id="incomeTaxCollected1" name="incomeTaxCollected[]">
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div class="form-group">
+              <label for="incomeTaxAdjusted1">আয়কর সমন্বয়:</label>
+              <input type="text" class="form-control" id="incomeTaxAdjusted1" name="incomeTaxAdjusted[]">
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div class="form-group">
+              <label for="otherCollected1">অন্যান্য আদায়:</label>
+              <input type="text" class="form-control" id="otherCollected1" name="otherCollected[]">
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div class="form-group">
+              <label for="otherAdjusted1">অন্যান্য সমন্বয়:</label>
+              <input type="text" class="form-control" id="otherAdjusted1" name="otherAdjusted[]">
+            </div>
+          </div>
+        </div>
+      </div>
+      <button type="button" class="btn btn-success" id="addParagraphBtn">আরও অনুচ্ছেদ যোগ করুন</button>
+      <button type="button" class="btn btn-danger" id="removeParagraphBtn">একটি অনুচ্ছেদ বাদ দিন</button>
+
+      <div class="form-group-box mt-3">
+          <div class="form-group">
+            <label for="jareeNo">জারিপত্র নং:</label>
+            <input type="text" class="form-control" id="jareeNo" name="jareeNo">
+          </div>
+
+          <div class="form-group">
+            <label for="jareeDate">জারিপত্র তাং:</label>
+            <input type="date" class="form-control" id="jareeDate" name="jareeDate">
+          </div>
+      </div>
+
+      <div class="form-group-box">
+          <div class="form-group">
+              <label for="additionalInfo">অতিরিক্ত তথ্য:</label>
+              <textarea class="form-control" id="additionalInfo" name="additionalInfo" rows="4" placeholder="এখানে অতিরিক্ত তথ্য লিখুন..."></textarea>
+          </div>
+      </div>
+
+      <div class="main-action-buttons-container">
+        <button type="submit" class="btn btn-success flex-fill">জমা দিন</button>
+        
+        <div class="custom-dropdown-wrapper">
+          <button class="btn btn-primary custom-dropdown-toggle" type="button" id="prepareReturnBtn">
+            রিটার্ণ প্রস্তুত করুন
+          </button>
+          <div class="custom-dropdown-menu" id="returnOptionsDropdown">
+            <div class="dropdown-item-container">
+                <button class="dropdown-item pakhik parent-dropdown-item" type="button" data-period="পাক্ষিক">
+                    পাক্ষিক রিটার্ণ
+                    <span class="dropdown-arrow">▶</span>
+                </button>
+                <div class="nested-dropdown-menu" data-parent-period="পাক্ষিক">
+                    <button class="dropdown-item ministry-btn" type="button" data-ministry="আর্থিক প্রতিষ্ঠান বিভাগ">আর্থিক প্রতিষ্ঠান বিভাগ</button>
+                    <button class="dropdown-item ministry-btn" type="button" data-ministry="বস্ত্র ও পাট">বস্ত্র ও পাট</button>
+                    <button class="dropdown-item ministry-btn" type="button" data-ministry="শিল্প+বাণিজ্য+বিমান">শিল্প+বাণিজ্য+বিমান</button>
+                </div>
+            </div>
+            <div class="dropdown-item-container">
+                <button class="dropdown-item mashik parent-dropdown-item" type="button" data-period="মাসিক">
+                    মাসিক রিটার্ণ
+                    <span class="dropdown-arrow">▶</span>
+                </button>
+                <div class="nested-dropdown-menu" data-parent-period="মাসিক">
+                    <button class="dropdown-item ministry-btn" type="button" data-ministry="আর্থিক প্রতিষ্ঠান বিভাগ">আর্থিক প্রতিষ্ঠান বিভাগ</button>
+                    <button class="dropdown-item ministry-btn" type="button" data-ministry="বস্ত্র ও পাট">বস্ত্র ও পাট</button>
+                    <button class="dropdown-item ministry-btn" type="button" data-ministry="শিল্প+বাণিজ্য+বিমান">শিল্প+বাণিজ্য+বিমান</button>
+                </div>
+            </div>
+            <div class="dropdown-item-container">
+                <button class="dropdown-item troimasik parent-dropdown-item" type="button" data-period="ত্রৈমাসিক">
+                    ত্রৈমাসিক রিটার্ণ
+                    <span class="dropdown-arrow">▶</span>
+                </button>
+                <div class="nested-dropdown-menu" data-parent-period="ত্রৈমাসিক">
+                    <button class="dropdown-item ministry-btn" type="button" data-ministry="আর্থিক প্রতিষ্ঠান বিভাগ">আর্থিক প্রতিষ্ঠান বিভাগ</button>
+                    <button class="dropdown-item ministry-btn" type="button" data-ministry="বস্ত্র ও পাট">বস্ত্র ও পাট</button>
+                    <button class="dropdown-item ministry-btn" type="button" data-ministry="শিল্প+বাণিজ্য+বিমান">শিল্প+বাণিজ্য+বিমান</button>
+                </div>
+            </div>
+            <div class="dropdown-item-container">
+                <button class="dropdown-item shanmasik parent-dropdown-item" type="button" data-period="ষাণ্মাসিক">
+                    ষাণ্মাসিক রিটার্ণ
+                    <span class="dropdown-arrow">▶</span>
+                </button>
+                <div class="nested-dropdown-menu" data-parent-period="ষাণ্মাসিক">
+                    <button class="dropdown-item ministry-btn" type="button" data-ministry="আর্থিক প্রতিষ্ঠান বিভাগ">আর্থিক প্রতিষ্ঠান বিভাগ</button>
+                    <button class="dropdown-item ministry-btn" type="button" data-ministry="বস্ত্র ও পাট">বস্ত্র ও পাট</button>
+                    <button class="dropdown-item ministry-btn" type="button" data-ministry="শিল্প+বাণিজ্য+বিমান">শিল্প+বাণিজ্য+বিমান</button>
+                </div>
+            </div>
+            <div class="dropdown-item-container">
+                <button class="dropdown-item batsarik parent-dropdown-item" type="button" data-period="বাৎসরিক">
+                    বাৎসরিক রিটার্ণ
+                    <span class="dropdown-arrow">▶</span>
+                </button>
+                <div class="nested-dropdown-menu" data-parent-period="বাৎসরিক">
+                    <button class="dropdown-item ministry-btn" type="button" data-ministry="আর্থিক প্রতিষ্ঠান বিভাগ">আর্থিক প্রতিষ্ঠান বিভাগ</button>
+                    <button class="dropdown-item ministry-btn" type="button" data-ministry="বস্ত্র ও পাট">বস্ত্র ও পাট</button>
+                    <button class="dropdown-item ministry-btn" type="button" data-ministry="শিল্প+বাণিজ্য+বিমান">শিল্প+বাণিজ্য+বিমান</button>
+                </div>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="btn btn-danger flex-fill" id="getSpreadsheetUrlBtn">মীমাংসা রেজিস্টার দেখুন</button>
+      </div>
+
+    </form>
+
+    <div id="responseMessage" class="text-center"></div>
+  </div>
+
+  <datalist id="numbersList">
+      <option value="১"></option>
+      <option value="২"></option>
+      <option value="৩"></option>
+      <option value="৪"></option>
+      <option value="৫"></option>
+      <option value="৬"></option>
+      <option value="৭"></option>
+      <option value="৮"></option>
+      <option value="৯"></option>
+      <option value="১০"></option>
+  </datalist>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <script>
+    let paragraphCount = 1;
+    let mouseX, mouseY; // Variables to store mouse coordinates
+    let currentMenuItem = null; // Stores the currently hovered parent dropdown item (e.g., পাক্ষিক রিটার্ণ)
+    let currentSubMenu = null; // Stores the currently shown nested dropdown menu (e.g., Ministry Menu)
+    let hideMainTimeout; // Timeout ID for hiding main menu
+    let hideNestedTimeout; // Timeout ID for hiding nested menus
+
+    // Update mouse position on mousemove for accurate trajectory tracking
+    $(document).on('mousemove', function(e) {
+        mouseX = e.pageX;
+        mouseY = e.pageY;
+    });
+
+    $(document).ready(function() {
+      $('#removeParagraphBtn').prop('disabled', true);
+      google.script.run
+        .withSuccessHandler(function(periodString) {
+          $('#currentCycleMessage').text(periodString);
+        })
+        .withFailureHandler(function(error) {
+          console.error("মাসিক চক্রের সময়কাল লোড করতে ব্যর্থ:", error);
+          $('#currentCycleMessage').text("মাসিক চক্রের তথ্য পাওয়া যায়নি।");
+        })
+        .getCurrentCyclePeriod();
+
+      // Function to hide all dropdowns (main and nested)
+      function hideAllDropdowns() {
+          $('#returnOptionsDropdown').removeClass('show');
+          // Important: Explicitly remove 'show-nested' from all containers
+          $('.dropdown-item-container').removeClass('show-nested');
+          
+          // Clear all pending timeouts
+          clearTimeout(hideMainTimeout);
+          clearTimeout(hideNestedTimeout);
+
+          // Reset tracked elements
+          currentMenuItem = null;
+          currentSubMenu = null;
+          
+      }
+
+      // Main dropdown toggle button click handler
+      $('#prepareReturnBtn').on('click', function(event) {
+        event.stopPropagation(); // Prevent document click from immediately closing it
+        const $returnOptionsDropdown = $('#returnOptionsDropdown');
+        
+        // Toggle the 'show' class
+        $returnOptionsDropdown.toggleClass('show');
+
+        // If the main dropdown is now hidden, ensure all nested menus are hidden too
+        if (!$returnOptionsDropdown.hasClass('show')) {
+            hideAllDropdowns();
+        }
+      });
+
+      // Hide the main dropdown menu when clicking outside of it
+      $(document).on('click', function(event) {
+        if (!$(event.target).closest('.custom-dropdown-wrapper').length) {
+          hideAllDropdowns();
+        }
+      });
+
+      // --- Nested Dropdown Logic (Mouse Trajectory) ---
+
+      // When mouse enters a parent dropdown item container
+      $('.dropdown-item-container').on('mouseenter', function() {
+        // Only proceed if the main dropdown is currently open
+        if (!$('#returnOptionsDropdown').hasClass('show')) {
+            return; // Don't show nested if main is closed
+        }
+
+        const $this = $(this);
+        const $nestedMenu = $this.find('.nested-dropdown-menu');
+
+        // Clear any previous hide timeouts for any menu
+        clearTimeout(hideNestedTimeout);
+        
+        // Hide all other nested menus to ensure only one is open at a time
+        $('.dropdown-item-container').not($this).removeClass('show-nested');
+
+        // Set the current active menu item and sub-menu
+        currentMenuItem = $this[0];
+        currentSubMenu = $nestedMenu[0];
+
+        $this.addClass('show-nested'); // Show the hovered nested menu
+      });
+
+      // When mouse leaves a parent dropdown item container
+      $('.dropdown-item-container').on('mouseleave', function() {
+        const $this = $(this);
+        // Set a timeout to hide the menu
+        hideNestedTimeout = setTimeout(function() {
+          // Check if mouse is still over the current menu item OR its submenu
+          // If not over either, then hide the menu
+          if (!isMouseOverElement(currentMenuItem) && !isMouseOverElement(currentSubMenu)) {
+              $this.removeClass('show-nested');
+          }
+        }, 100); // Small delay before hiding (adjust as needed)
+      });
+
+      // Keep sub-menu open when hovering over the sub-menu itself
+      $('.nested-dropdown-menu').on('mouseenter', function() {
+        clearTimeout(hideNestedTimeout); // Clear hide timeout if mouse re-enters a sub-menu
+      });
+
+      // When mouse leaves the nested menu, hide it after a small delay
+      $('.nested-dropdown-menu').on('mouseleave', function() {
+        const $this = $(this);
+        hideNestedTimeout = setTimeout(function() {
+          // Check if mouse is still over the parent menu item OR the sub-menu itself
+          if (!isMouseOverElement(currentMenuItem) && !isMouseOverElement(currentSubMenu)) {
+              $this.closest('.dropdown-item-container').removeClass('show-nested');
+          }
+        }, 100); // Small delay before hiding (adjust as needed)
+      });
+
+      // Helper function to check if the mouse is currently over a given element
+      function isMouseOverElement(element) {
+        if (!element) return false;
+        const rect = element.getBoundingClientRect();
+        return (
+            mouseX >= rect.left &&
+            mouseX <= rect.right &&
+            mouseY >= rect.top &&
+            mouseY <= rect.bottom
+        );
+      }
+      // --- End Nested Dropdown Logic ---
+
+      // Function to convert Bengali numerals to English numerals
+      function convertBengaliToEnglishNumerals(inputString) {
+        if (typeof inputString !== 'string') {
+          return inputString;
+        }
+        const bengaliNumerals = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+        const englishNumerals = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+        let convertedString = inputString;
+        for (let i = 0; i < bengaliNumerals.length; i++) {
+          const regex = new RegExp(bengaliNumerals[i], 'g');
+          convertedString = convertedString.replace(regex, englishNumerals[i]);
+        }
+        return convertedString;
+      }
+
+      // Add paragraph button click handler
+      $('#addParagraphBtn').click(function() {
+        paragraphCount++;
+        const newParagraphHtml = `
+          <div class="paragraph-entry row no-gutters" id="paragraph${paragraphCount}">
+            <h4 class="col-12">ক্রমিক নং- ${paragraphCount}</h4>
+
+            <div class="col-12">
+              <div class="form-group">
+                <label for="paragraphNo${paragraphCount}">অনুচ্ছেদ নং:</label>
+                <input type="text" class="form-control" id="paragraphNo${paragraphCount}" name="paragraphNo[]" required list="numbersList">
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div class="form-group">
+                <label for="paragraphType${paragraphCount}">নিষ্পত্তির ধরণ:</label>
+                <select class="form-control" id="paragraphType${paragraphCount}" name="paragraphType[]">
+                  <option value="" disabled selected>নির্বাচন করুন</option>
+                  <option value="পূর্ণাঙ্গ">পূর্ণাঙ্গ</option>
+                  <option value="আংশিক">আংশিক</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div class="form-group">
+                <label for="involvedAmount${paragraphCount}">জড়িত টাকা:</label>
+                <input type="text" class="form-control" id="involvedAmount${paragraphCount}" name="involvedAmount[]">
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div class="form-group">
+                <label for="vatCollected${paragraphCount}">ভ্যাট আদায়:</label>
+                <input type="text" class="form-control" id="vatCollected${paragraphCount}" name="vatCollected[]">
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div class="form-group">
+                <label for="vatAdjusted${paragraphCount}">ভ্যাট সমন্বয়:</label>
+                <input type="text" class="form-control" id="vatAdjusted${paragraphCount}" name="vatAdjusted[]">
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div class="form-group">
+                <label for="incomeTaxCollected${paragraphCount}">আয়কর আদায়:</label>
+                <input type="text" class="form-control" id="incomeTaxCollected${paragraphCount}" name="incomeTaxCollected[]">
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div class="form-group">
+                <label for="incomeTaxAdjusted${paragraphCount}">আয়কর সমন্বয়:</label>
+                <input type="text" class="form-control" id="incomeTaxAdjusted${paragraphCount}" name="incomeTaxAdjusted[]">
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div class="form-group">
+                <label for="otherCollected${paragraphCount}">অন্যান্য আদায়:</label>
+                <input type="text" class="form-control" id="otherCollected${paragraphCount}" name="otherCollected[]">
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div class="form-group">
+                <label for="otherAdjusted${paragraphCount}">অন্যান্য সমন্বয়:</label>
+                <input type="text" class="form-control" id="otherAdjusted${paragraphCount}" name="otherAdjusted[]">
+              </div>
+            </div>
+          </div>
+        `;
+        $('#paragraphsContainer').append(newParagraphHtml);
+        $('#removeParagraphBtn').prop('disabled', false);
+      });
+
+      // Remove paragraph button click handler
+      $('#removeParagraphBtn').click(function() {
+        if (paragraphCount > 1) {
+          $(`#paragraph${paragraphCount}`).remove();
+          paragraphCount--;
+          if (paragraphCount === 1) {
+            $('#removeParagraphBtn').prop('disabled', true);
+          }
+        }
+      });
+
+      // Form submission handler
+      $('#dataEntryForm').submit(function(e) {
+        e.preventDefault();
+        const formData = {
+          ministryName: $('#ministryName').val(),
+          institutionName: $('#institutionName').val(),
+          branchName: $('#branchName').val(),
+          auditYear: $('#auditYear').val(),
+          letterNoDate: $('#letterNoDate').val(),
+          workPaperNoDate: $('#workPaperNoDate').val(),
+          objectionType: $('#objectionType').val(),
+          jareeNo: $('#jareeNo').val(),
+          jareeDate: $('#jareeDate').val(),
+          additionalInfo: $('#additionalInfo').val(),
+          paragraphs: []
+        };
+
+        for (let i = 1; i <= paragraphCount; i++) {
+          const paragraph = {
+            paragraphNo: convertBengaliToEnglishNumerals($(`#paragraphNo${i}`).val()),
+            paragraphType: $(`#paragraphType${i}`).val(),
+            involvedAmount: parseFloat(convertBengaliToEnglishNumerals($(`#involvedAmount${i}`).val())) || 0,
+            vatCollected: parseFloat(convertBengaliToEnglishNumerals($(`#vatCollected${i}`).val())) || 0,
+            vatAdjusted: parseFloat(convertBengaliToEnglishNumerals($(`#vatAdjusted${i}`).val())) || 0,
+            incomeTaxCollected: parseFloat(convertBengaliToEnglishNumerals($(`#incomeTaxCollected${i}`).val())) || 0,
+            incomeTaxAdjusted: parseFloat(convertBengaliToEnglishNumerals($(`#incomeTaxAdjusted${i}`).val())) || 0,
+            otherCollected: parseFloat(convertBengaliToEnglishNumerals($(`#otherCollected${i}`).val())) || 0,
+            otherAdjusted: parseFloat(convertBengaliToEnglishNumerals($(`#otherAdjusted${i}`).val())) || 0
+          };
+          formData.paragraphs.push(paragraph);
+        }
+
+        $('#responseMessage').text('জমা দেওয়া হচ্ছে...');
+        google.script.run
+          .withSuccessHandler(function(response) {
+            $('#responseMessage').text(response.message);
+            if (response.success) {
+              $('#dataEntryForm')[0].reset();
+              // প্রথম অনুচ্ছেদ বাদে বাকিগুলো সরান
+              $('.paragraph-entry:not(#paragraph1)').remove();
+              paragraphCount = 1;
+              $('#paragraph1 h4').text('ক্রমিক নং- 1');
+              $('#removeParagraphBtn').prop('disabled', true); // Ensure button is disabled after reset
+            }
+            setTimeout(function() {
+              $('#responseMessage').text('');
+            }, 3000);
+          })
+          .withFailureHandler(function(error) {
+            $('#responseMessage').text('ত্রুটি: ' + error.message);
+            setTimeout(function() {
+              $('#responseMessage').text('');
+            }, 5000);
+          })
+          .processFormData(formData); // Apps Script function call
+      });
+
+      // "মীমাংসা রেজিস্টার দেখুন" বাটনের জন্য ইভেন্ট লিসেনার
+      $('#getSpreadsheetUrlBtn').click(function() {
+        google.script.run
+          .withSuccessHandler(function(url) {
+            if (url) {
+              window.open(url, '_blank');
+            } else {
+              console.error('মীমাংসা রেজিস্টার URL পাওয়া যায়নি।');
+            }
+          })
+          .withFailureHandler(function(error) {
+            console.error("মীমাংসা রেজিস্টার URL পেতে ব্যর্থ: ", error);
+          })
+          .getSpreadsheetUrl(); // Apps Script function call
+      });
+
+      // Handle clicks on the nested ministry buttons
+      $(document).on('click', '.ministry-btn', function(event) {
+        event.stopPropagation(); // Prevent main dropdown from closing immediately
+        const selectedPeriod = $(this).closest('.nested-dropdown-menu').data('parent-period');
+        const selectedMinistry = $(this).data('ministry');
+        
+        // Hide all dropdowns after selection
+        hideAllDropdowns(); // Use the new function to ensure all are hidden
+
+        $('#responseMessage').text('রিটার্ণ তৈরি হচ্ছে...'); // Show loading message
+
+        google.script.run
+          .withSuccessHandler(function(response) {
+            $('#responseMessage').text(response.message);
+            if (response.success && response.fileUrl) {
+              window.open(response.fileUrl, '_blank'); // Open the generated sheet in a new tab
+            }
+            setTimeout(function() { $('#responseMessage').text(''); }, 12000);
+          })
+          .withFailureHandler(function(error) {
+            $('#responseMessage').text('ত্রুটি: ' + error.message);
+            setTimeout(function() { $('#responseMessage').text(''); }, 15000);
+          })
+          .generateReturn(selectedPeriod, selectedMinistry); // Call a single function with both parameters
+      });
+    });
+  </script>
+</body>
+</html>
